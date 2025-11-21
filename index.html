@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>WhaleTracker – Baleines BTC / ETH / BSC / PulseChain</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Google AdSense -->
+  <script async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1012970945258326"
+    crossorigin="anonymous"></script>
+
+  <style>
+    :root {
+      --bg: #050816;
+      --bg-soft: #0b1020;
+      --card: #0f172a;
+      --accent: #22c55e;
+      --accent-soft: #15803d;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --border: #1f2937;
+      --danger: #ef4444;
+      --radius-lg: 16px;
+      --shadow-soft: 0 18px 45px rgba(0,0,0,0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1f2937 0, #020617 45%, #000 100%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    .card {
+      background: radial-gradient(circle at top left, rgba(15,23,42,0.98), rgba(15,23,42,0.92));
+      border-radius: 24px;
+      padding: 24px 24px 28px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148,163,184,0.18);
+      backdrop-filter: blur(18px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      top: -40px;
+      right: -80px;
+      width: 700px;
+      height: 700px;
+      background-image: url("baleine.webp");
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: top right;
+      opacity: 0.26;
+      pointer-events: none;
+      filter: drop-shadow(0 0 28px rgba(56,189,248,0.35));
+      z-index: 0;
+    }
+
+    .card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+      align-items: center;
+    }
+
+    .title-block h1 {
+      font-size: 1.5rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .title-block p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 0.75rem;
+    }
+
+    .badge {
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.3);
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(15,23,42,0.72);
+      backdrop-filter: blur(10px);
+    }
+
+    .badge span.dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 10px rgba(34,197,94,0.7);
+    }
+
+    .donation-card {
+      position: relative;
+      z-index: 3;
+      margin: 18px auto 10px;
+      width: 440px;
+      max-width: 100%;
+      background: radial-gradient(circle at top left, rgba(15,23,42,0.98), rgba(15,23,42,0.92));
+      border-radius: 18px;
+      border: 1px solid rgba(148,163,184,0.35);
+      padding: 12px 16px 14px;
+      box-shadow: 0 14px 30px rgba(15,23,42,0.75);
+    }
+
+    .donation-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 0.86rem;
+    }
+
+    .donation-header span.icon {
+      font-size: 1.05rem;
+    }
+
+    .donation-header strong {
+      letter-spacing: 0.03em;
+    }
+
+    .donation-sub {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .donation-row {
+      display: flex;
+      align-items: center;
+      margin-top: 4px;
+      gap: 6px;
+      font-size: 0.78rem;
+    }
+
+    .donation-label {
+      width: 42px;
+      font-weight: 600;
+      color: #e5e7eb;
+    }
+
+    .donation-address {
+      flex: 1;
+      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.75rem;
+      color: #d1d5db;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .donation-footer {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 8px;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 0 6px;
+    }
+
+    .filter-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.3);
+      background: rgba(15,23,42,0.9);
+      color: var(--muted);
+      font-size: 0.8rem;
+      padding: 6px 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease-out;
+    }
+
+    .filter-btn.active {
+      background: radial-gradient(circle at top left, #22c55e, #15803d 60%, #052e16 100%);
+      border-color: rgba(34,197,94,0.8);
+      color: #ecfdf5;
+      box-shadow: 0 0 18px rgba(34,197,94,0.55);
+    }
+
+    .filter-btn span.pill-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(148,163,184,0.8);
+    }
+
+    .filter-btn.active span.pill-dot {
+      background: white;
+    }
+
+    .stats-global {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .table-wrapper {
+      border-radius: 16px;
+      border: 1px solid rgba(148,163,184,0.2);
+      background: radial-gradient(circle at top, rgba(15,23,42,0.98), rgba(15,23,42,0.9));
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      display: block;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+      min-width: 620px;
+    }
+
+    thead {
+      background: rgba(15,23,42,0.98);
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(30,41,59,0.9);
+      white-space: nowrap;
+    }
+
+    th {
+      font-weight: 600;
+      color: rgba(148,163,184,0.95);
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    tbody tr {
+      background: rgba(15,23,42,0.85);
+      transition: background 0.15s ease-out, transform 0.12s ease-out, box-shadow 0.12s ease-out;
+    }
+
+    tbody tr:nth-child(even) {
+      background: rgba(15,23,42,0.9);
+    }
+
+    tbody tr:hover {
+      background: rgba(15,23,42,0.98);
+      box-shadow: 0 0 0 1px rgba(34,197,94,0.25);
+      transform: translateY(-1px);
+    }
+
+    .network-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(148,163,184,0.35);
+    }
+
+    .network-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+    }
+
+    .net-btc { background: #f97316; }
+    .net-eth { background: #6366f1; }
+    .net-bsc { background: #eab308; }
+    .net-pls { background: #22c55e; }
+
+    .address {
+      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.78rem;
+      color: #f9fafb;
+    }
+
+    .actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-sm {
+      font-size: 0.72rem;
+      padding: 4px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(34,197,94,0.85);
+      background: radial-gradient(circle at top, rgba(34,197,94,0.23), rgba(15,23,42,1));
+      color: #bbf7d0;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.12s ease-out;
+      white-space: nowrap;
+    }
+
+    .btn-sm.primary {
+      border-color: rgba(34,197,94,1);
+      background: radial-gradient(circle at top, rgba(34,197,94,0.35), rgba(15,23,42,1));
+      color: #ecfdf5;
+    }
+
+    .btn-sm:hover {
+      background: rgba(15,23,42,1);
+      transform: translateY(-0.5px);
+      box-shadow: 0 0 12px rgba(34,197,94,0.5);
+    }
+
+    .btn-sm.primary:hover {
+      box-shadow: 0 0 16px rgba(34,197,94,0.7);
+    }
+
+    .type-pill {
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.35);
+      color: rgba(209,213,219,0.9);
+      background: rgba(15,23,42,0.9);
+    }
+
+    .empty-state {
+      padding: 16px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .bot-analysis {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(148,163,184,0.4);
+      background: radial-gradient(circle at top left, rgba(15,23,42,0.98), rgba(15,23,42,0.9));
+      box-shadow: 0 12px 30px rgba(15,23,42,0.7);
+      font-size: 0.8rem;
+    }
+
+    .bot-analysis-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .bot-chip {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(34,197,94,0.16);
+      border: 1px solid rgba(34,197,94,0.7);
+      color: #bbf7d0;
+      font-size: 0.75rem;
+    }
+
+    .bot-wallet-name {
+      font-weight: 600;
+      color: #e5e7eb;
+      font-size: 0.8rem;
+      text-align: right;
+    }
+
+    .bot-analysis-body p {
+      margin: 2px 0;
+    }
+
+    .bot-analysis-body p span.label {
+      color: var(--muted);
+    }
+
+    .bot-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.4);
+      font-size: 0.7rem;
+      margin-right: 4px;
+      margin-top: 2px;
+    }
+
+    .footer-info {
+      display: flex;
+      justify-content: flex-end;
+      padding: 8px 12px 4px;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    /* Bandeau sponsor */
+    .sponsor-strip {
+      margin: 10px 0 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(34,197,94,0.5);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+    }
+
+    .sponsor-strip span.badge {
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(34,197,94,0.2);
+      color: #bbf7d0;
+      border: 1px solid rgba(34,197,94,0.7);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .sponsor-strip a {
+      color: #22c55e;
+      text-decoration: none;
+    }
+
+    .sponsor-strip a:hover {
+      text-decoration: underline;
+    }
+
+    /* Bloc pub AdSense */
+    .ad-banner {
+      margin: 10px 0 14px;
+      border-radius: 16px;
+      border: 1px dashed rgba(148,163,184,0.4);
+      background: radial-gradient(circle at top, rgba(15,23,42,0.96), rgba(15,23,42,0.9));
+      padding: 8px 10px;
+      min-height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .ad-banner small {
+      font-size: 0.7rem;
+      opacity: 0.8;
+    }
+
+    /* Partenaires / affiliation */
+    .partners-section {
+      margin: 18px 0 4px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(148,163,184,0.35);
+      background: radial-gradient(circle at top left, rgba(15,23,42,0.97), rgba(15,23,42,0.9));
+      box-shadow: 0 10px 26px rgba(15,23,42,0.7);
+      font-size: 0.8rem;
+    }
+
+    .partners-section h3 {
+      font-size: 0.9rem;
+      margin-bottom: 6px;
+    }
+
+    .partners-section p {
+      color: var(--muted);
+      margin-bottom: 10px;
+      font-size: 0.78rem;
+    }
+
+    .partners-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+    }
+
+    .partner-card {
+      padding: 8px 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(148,163,184,0.35);
+      background: rgba(15,23,42,0.96);
+    }
+
+    .partner-card strong {
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .partner-card a {
+      color: #22c55e;
+      text-decoration: none;
+      font-size: 0.78rem;
+    }
+
+    .partner-card a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 800px) {
+      body {
+        padding: 12px;
+      }
+      .card {
+        padding: 16px;
+      }
+      .header {
+        align-items: flex-start;
+      }
+      .donation-card {
+        width: 100%;
+      }
+      th:nth-child(4), td:nth-child(4) {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="header">
+        <div class="title-block">
+          <h1>WhaleTracker</h1>
+          <p>Suivi de quelques grosses baleines publiques sur Bitcoin, Ethereum, BSC et PulseChain.</p>
+        </div>
+        <div class="badges">
+          <div class="badge">
+            <span class="dot"></span>
+            <span>Pas d’API → aucun risque d’erreur API(NOTOK)</span>
+          </div>
+          <div class="badge">
+            <span>👀</span><span>Cliquez sur “Explorer” pour voir les détails en temps réel</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Encart sponsor -->
+      <div class="sponsor-strip">
+        <span class="badge">Sponsorisé</span>
+        <span>
+          Propulsé par
+          <a href="https://ton-lien-affiliation-ou-sponsor.com" target="_blank" rel="noopener">
+            Ton Sponsor Crypto
+          </a>
+          – bots de trading & signaux sur BTC / ETH.
+        </span>
+      </div>
+
+      <div class="filters">
+        <button class="filter-btn active" data-network="all">
+          <span class="pill-dot"></span> Tout
+        </button>
+        <button class="filter-btn" data-network="bitcoin">
+          <span class="pill-dot"></span> ₿ Bitcoin
+        </button>
+        <button class="filter-btn" data-network="ethereum">
+          <span class="pill-dot"></span> Ξ Ethereum
+        </button>
+        <button class="filter-btn" data-network="bsc">
+          <span class="pill-dot"></span> BSC
+        </button>
+        <button class="filter-btn" data-network="pulsechain">
+          <span class="pill-dot"></span> PulseChain
+        </button>
+      </div>
+
+      <div id="stats-global" class="stats-global"></div>
+
+      <!-- Bloc pub AdSense -->
+      <div class="ad-banner">
+        <!-- Quand tu auras ton bloc, remplace 1234567890 par le vrai data-ad-slot -->
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-1012970945258326"
+             data-ad-slot="1234567890"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+        <noscript>
+          <small>Publicité (activez JavaScript pour voir les annonces).</small>
+        </noscript>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Baleine / Adresse nommée</th>
+              <th>Réseau</th>
+              <th>Adresse</th>
+              <th>Catégorie</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="whales-body"></tbody>
+        </table>
+        <div id="empty-state" class="empty-state" style="display:none;">
+          Aucune baleine trouvée pour ce filtre.
+        </div>
+      </div>
+
+      <div id="bot-analysis" class="bot-analysis" style="display:none;">
+        <div class="bot-analysis-header">
+          <span class="bot-chip">🤖 WhaleBot</span>
+          <span id="bot-wallet-name" class="bot-wallet-name"></span>
+        </div>
+        <div id="bot-analysis-body" class="bot-analysis-body"></div>
+      </div>
+
+      <!-- DONATION CARD -->
+      <div class="donation-card">
+        <div class="donation-header">
+          <span class="icon">🙏</span>
+          <strong>Vous aimez WhaleTracker ?</strong>
+        </div>
+        <div class="donation-sub">
+          Vous pouvez soutenir le projet avec un petit don :
+        </div>
+
+        <div class="donation-row">
+          <span class="donation-label">ETH</span>
+          <span class="donation-address" id="addr-eth">
+            0x7a23b75434942ddd7d9fe19aa0ed2fea08ed57a1
+          </span>
+          <button class="btn-sm" data-copy="#addr-eth">Copier</button>
+        </div>
+
+        <div class="donation-row">
+          <span class="donation-label">BNB</span>
+          <span class="donation-address" id="addr-bnb">
+            0x7a23b75434942ddd7d9fe19aa0ed2fea08ed57a1
+          </span>
+          <button class="btn-sm" data-copy="#addr-bnb">Copier</button>
+        </div>
+
+        <div class="donation-row">
+          <span class="donation-label">PLS</span>
+          <span class="donation-address" id="addr-pls">
+            0x7a23b75434942ddd7d9fe19aa0ed2fea08ed57a1
+          </span>
+          <button class="btn-sm" data-copy="#addr-pls">Copier</button>
+        </div>
+
+        <div class="donation-footer">
+          <button class="btn-sm primary" id="copy-all">Copier tout</button>
+        </div>
+      </div>
+
+      <!-- Partenaires & liens d'affiliation -->
+      <div class="partners-section">
+        <h3>Outils & partenaires recommandés 🧰</h3>
+        <p>Certains liens ci-dessous peuvent être des liens d’affiliation : ils ne changent rien pour vous, mais soutiennent WhaleTracker.</p>
+
+        <div class="partners-grid">
+          <div class="partner-card">
+            <strong>🔐 Ledger Wallet</strong>
+            <span>Protégez vos clés privées hors-ligne.</span><br>
+            <a href="https://ton-lien-affiliation-ledger.com" target="_blank" rel="noopener">
+              Obtenir un Ledger →
+            </a>
+          </div>
+
+          <div class="partner-card">
+            <strong>📈 Exchange partenaire</strong>
+            <span>Frais réduits pour trader BTC / ETH / PLS.</span><br>
+            <a href="https://ton-lien-affiliation-exchange.com" target="_blank" rel="noopener">
+              S’inscrire avec réduction →
+            </a>
+          </div>
+
+          <div class="partner-card">
+            <strong>🛡️ VPN recommandé</strong>
+            <span>Sécurisez vos connexions à vos wallets & CEX.</span><br>
+            <a href="https://ton-lien-affiliation-vpn.com" target="_blank" rel="noopener">
+              Activer l’offre VPN →
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-info">
+        Dernière mise à jour : <span id="last-refresh" style="margin-left:4px;">--:--:--</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const ETHERSCAN_API_KEY = "5QD6AF5A7FDHG373RPVNTJJKZK59RF86HD";
+
+    const whales = [
+      { name: "Binance Cold Wallet #1", network: "bitcoin", address: "34xp4vRoCGJym3xR7yCVPFHoCNxv4Twseo", type: "Exchange" },
+      { name: "Binance Cold Wallet #2", network: "bitcoin", address: "3M219KR5vEneNb47ewrPfWyb5jQ2DjxRP6", type: "Exchange" },
+      { name: "Robinhood Cold Wallet", network: "bitcoin", address: "bc1ql49ydapnjafl5t2cp9zqpjwe6pdgmx98859v2", type: "Exchange / Custody" },
+      { name: "Mt. Gox Hack", network: "bitcoin", address: "1FeexV6bAHb8ybZjqQMJrcCrHgW9sb6uF", type: "Hack / Historic" },
+      { name: "Silk Road (FBI Confiscated)", network: "bitcoin", address: "bc1qa5wkgaew2dkv56kfvj49j0av5nml45x9ek9hz6", type: "Gov / Confiscated" },
+      { name: "Binance BTCB Reserve", network: "bitcoin", address: "3LYJfcfHPXYJreMsASk2jkn69LWEYKzexb", type: "Bridge Reserve" },
+      { name: "Mr. 100", network: "bitcoin", address: "1Ay8vMC7R1UbyCCZRVULMV7iQpHSAbguJP", type: "Unknown whale" },
+      { name: "Whale 1LdRcd…", network: "bitcoin", address: "1LdRcdxfbSnmCYYNdeYpUnztiYzVfBEQeC", type: "Unknown whale" },
+      { name: "OKEx Whale", network: "bitcoin", address: "3MgEAFWu1HKSnZ5ZsC8qf61ZW18xrP5pgd", type: "Exchange" },
+      { name: "Whale 1AC4fM…", network: "bitcoin", address: "1AC4fMwgY8j9onSbXEWEh6Zan8QGMSdmtA", type: "Unknown whale" },
+
+      { name: "BTC Whale extra #11", network: "bitcoin", address: "bc1qazcm763858nkj2dj986etajv6wquslv8uxwczt", type: "Unknown whale" },
+      { name: "BTC Whale extra #12", network: "bitcoin", address: "bc1qd4ysezhmypwty5dnw7c8nqy5h5nxg0xqsvaefd0qn5kq32vwnwqqgv4rzr", type: "Unknown whale" },
+      { name: "BTC Whale extra #13", network: "bitcoin", address: "bc1q8yj0herd4r4yxszw3nkfvt53433thk0f5qst4g", type: "Unknown whale" },
+      { name: "BTC Whale extra #14", network: "bitcoin", address: "bc1qa2eu6p5rl9255e3xz7fcgm6snn4wl5kdfh7zpt05qp5fad9dmsys0qjg0e", type: "Unknown whale" },
+      { name: "BTC Whale extra #15", network: "bitcoin", address: "bc1q0ymzksy046tv4z88ts5nmu7s574umnwmdev3rt", type: "Unknown whale" },
+      { name: "BTC Whale extra #16", network: "bitcoin", address: "bc1q4j7fcl8zx5yl56j00nkqez9zf3f6ggqchwzzcs5hjxwqhsgxvavq3qfgpr", type: "Unknown whale" },
+      { name: "BTC Whale extra #17", network: "bitcoin", address: "bc1qy3uw2kk45uj9vsy52rjfhydm2tnd6hreu8vha3", type: "Unknown whale" },
+      { name: "BTC Whale extra #18", network: "bitcoin", address: "1LruNZjwamWJXThX2Y8C2d47QqhAkkc5os", type: "Unknown whale" },
+      { name: "BTC Whale extra #19", network: "bitcoin", address: "bc1qgdjqv0av3q56jvd82tkdjpy7gdp9ut8tlqmgrpmv24sq90ecnvqqjwvw97", type: "Exchange / Cold wallet" },
+      { name: "BTC Whale extra #20", network: "bitcoin", address: "bc1qjasf9z3h7w3jspkhtgatgpyvvzgpa2wwd2lr0eh5tx44reyn2k7sfc27a4", type: "Corporate Treasury" },
+
+      { name: "Binance: Hot Wallet 20", network: "ethereum", address: "0xf977814e90dA44bFA03b6295A0616a897441aceC", type: "Exchange" },
+      { name: "Binance 14", network: "ethereum", address: "0x28C6c06298d514Db089934071355E5743bf21d60", type: "Exchange" },
+      { name: "Binance 15", network: "ethereum", address: "0x21a31Ee1afC51d94C2eFcCAa2092aD1028285549", type: "Exchange" },
+      { name: "Kraken 4", network: "ethereum", address: "0x267be1C1D684F78cb4F6a176C4911b741E4FfDc0", type: "Exchange" },
+      { name: "Beacon Deposit Contract", network: "ethereum", address: "0x00000000219ab540356cBB839Cbe05303d7705Fa", type: "Staking / Protocol" },
+      { name: "WETH9 Contract", network: "ethereum", address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2", type: "DeFi / WETH" },
+      { name: "Binance: ETH Wallet (Be0e…)", network: "ethereum", address: "0xBe0eB53f46cd790Cd13851d5EFF43D12404d33E8", type: "Exchange" },
+      { name: "Robinhood: Cold Wallet 1", network: "ethereum", address: "0x40B38765696e3d5d8d9d834D8AaD4bB6e418E489", type: "Exchange / Custody" },
+      { name: "Bitfinex: Cold Wallet", network: "ethereum", address: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e", type: "Exchange" },
+      { name: "Gemini: Hot Wallet", network: "ethereum", address: "0x61edcDf5bB737adfFe5043706E7C5bb1F1a56eEa", type: "Exchange" },
+      { name: "Binance: Wallet 0x47ac…", network: "ethereum", address: "0x47aC0fb4F2d84898e4D9E7B4DAb3C24507A6D503", type: "Exchange" },
+      { name: "Bitfinex: Wallet 0xC61b…", network: "ethereum", address: "0xC61b9bB3A7A0767E3179713F3A5C7A9AeDCE193c", type: "Exchange" },
+      { name: "Upbit 1 (Exchange reserve)", network: "ethereum", address: "0x390de26D772D2E2005c6D1d24afC902bAE37A4BB", type: "Exchange" },
+      { name: "Coinbase: Wallet 10", network: "ethereum", address: "0xA9D1E08C7793af67E9D92fe308D5697FB81D3E43", type: "Exchange" },
+      { name: "Vitalik Buterin (vitalik.eth)", network: "ethereum", address: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045", type: "Founder / Individual" },
+
+      { name: "ETH Whale extra #17", network: "ethereum", address: "0x0E58e8993100F1CBe45376c410F97f4893d9BfCD", type: "Exchange" },
+      { name: "ETH Whale extra #18", network: "ethereum", address: "0xcA8Fa8f0b631EcdB18Cda619C4Fc9d197c8aFfCa", type: "Unknown whale" },
+      { name: "ETH Whale extra #19", network: "ethereum", address: "0x49048044D57e1C92A77f79988d21Fa8fAF74E97e", type: "Bridge / L2" },
+      { name: "ETH Whale extra #20", network: "ethereum", address: "0xE92d1A43df510F82C66382592a047d288f85226f", type: "Exchange" },
+      { name: "ETH Whale extra #21", network: "ethereum", address: "0x8D05d9924fe935BD533a844271a1B2078EaE6FcF", type: "Exchange" },
+      { name: "ETH Whale extra #22", network: "ethereum", address: "0x3BfC20f0B9aFcAcE800D73D2191166FF16540258", type: "Multisig / Treasury" },
+      { name: "ETH Whale extra #23", network: "ethereum", address: "0xA160cdAB225685dA1d56aa342Ad8841c3b53f291", type: "Mixer / Sanctioned" },
+      { name: "ETH Whale extra #24", network: "ethereum", address: "0x539C92186f7C6CC4CbF443F26eF84C595baBBcA1", type: "Exchange" },
+      { name: "ETH Whale extra #25", network: "ethereum", address: "0x868daB0b8E21EC0A48b726A1ccf25826c78C6d7F", type: "Exchange" },
+      { name: "ETH Whale extra #26", network: "ethereum", address: "0xAFCD96e580138CFa2332C632E66308eACD45C5dA", type: "Exchange" },
+
+      { name: "Binance: SAFU Wallet", network: "bsc", address: "0x4b16c5de96eb2117bbe5fd171e4d203624b014aa", type: "SAFU / Reserve" },
+      { name: "Venus: vBNB (big protocol)", network: "bsc", address: "0xcf6bb5389c92bdda8a3747ddb454cb7a64626c63", type: "DeFi Protocol" },
+      { name: "BNB Bridge Exploiter", network: "bsc", address: "0x489a8756c18c0b8b24ec2a2b9ff3d4d447f79bec", type: "Exploit wallet" },
+      { name: "Binance: Hot Wallet 6", network: "bsc", address: "0x8894e0a0c962cb723c1976a4421c95949be2d4e3", type: "Exchange" },
+      { name: "Binance: Hot Wallet 20", network: "bsc", address: "0xf977814e90dA44bFA03b6295A0616a897441aceC", type: "Exchange" },
+
+      { name: "BSC Whale extra #6", network: "bsc", address: "0xBE0eB53F46cd790Cd13851d5EFF43D12404d33E8", type: "Exchange" },
+      { name: "BSC Whale extra #7", network: "bsc", address: "0x0000000000000000000000000000000000001004", type: "Bridge / System" },
+      { name: "BSC Whale extra #8", network: "bsc", address: "0x000000000000000000000000000000000000dEaD", type: "Burn / Null" },
+      { name: "BSC Whale extra #9", network: "bsc", address: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c", type: "WBNB / Core token" },
+      { name: "BSC Whale extra #10", network: "bsc", address: "0xb2fc77ce797505e3adce47cb3ddfa8482fcf3799", type: "Token whale (BSCS)" },
+      { name: "BSC Whale extra #11", network: "bsc", address: "0x0ec48e293f34680ef14055ad14d84b2e83a9d6b1", type: "Token whale (BSCS)" },
+      { name: "BSC Whale extra #12", network: "bsc", address: "0x4982085c9e2f89f2ecb8131eca71afad896e89cb", type: "Token whale (BSCS)" },
+      { name: "BSC Whale extra #13", network: "bsc", address: "0x9fc8f9c2140024dd59e5f6b67d5447cfbabe14df", type: "Token whale (BSCS)" },
+      { name: "BSC Whale extra #14", network: "bsc", address: "0x0d0707963952f2fba59dd06f2b425ace40b492fe", type: "Token whale (BSCS)" },
+      { name: "BSC Whale extra #15", network: "bsc", address: "0xf1789773b664cf6525e7aa12f4bf6c8a089935f4", type: "Token whale (BSCS)" },
+
+      { name: "PulseChain PLS (core)", network: "pulsechain", address: "0xA1077a294dDE1B09bB078844df40758a5D0f9a27", type: "Core / System" },
+      { name: "PulseX (PLSX)", network: "pulsechain", address: "0x95B303987A60C71504D99Aa1b13B4DA07b0790ab", type: "DEX / Protocol" },
+      { name: "INC Token", network: "pulsechain", address: "0x2fa878Ab3F87CC1C9737Fc071108F904c0B0C95d", type: "Reward / Protocol" },
+      { name: "HEX (sur Pulse)", network: "pulsechain", address: "0x2b591e99afE9f32eAA6214f7B7629768c40Eeb39", type: "Token RH" }
+    ];
+
+    function getExplorerUrl(network, address) {
+      switch (network) {
+        case "bitcoin": return "https://www.blockchain.com/btc/address/" + address;
+        case "ethereum": return "https://etherscan.io/address/" + address;
+        case "bsc": return "https://bscscan.com/address/" + address;
+        case "pulsechain": return "https://scan.pulsechain.com/address/" + address;
+        default: return "#";
+      }
+    }
+
+    function networkLabel(network) {
+      switch (network) {
+        case "bitcoin": return "Bitcoin";
+        case "ethereum": return "Ethereum";
+        case "bsc": return "BSC";
+        case "pulsechain": return "PulseChain";
+        default: return network;
+      }
+    }
+
+    function networkDotClass(network) {
+      switch (network) {
+        case "bitcoin": return "network-dot net-btc";
+        case "ethereum": return "network-dot net-eth";
+        case "bsc": return "network-dot net-bsc";
+        case "pulsechain": return "network-dot net-pls";
+        default: return "network-dot";
+      }
+    }
+
+    function copyToClipboard(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).catch(() => {});
+      } else {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        try { document.execCommand("copy"); } catch (e) {}
+        document.body.removeChild(textarea);
+      }
+    }
+
+    function formatTime(date) {
+      const pad = n => String(n).padStart(2, "0");
+      return pad(date.getHours()) + ":" + pad(date.getMinutes()) + ":" + pad(date.getSeconds());
+    }
+
+    function updateLastRefresh() {
+      const el = document.getElementById("last-refresh");
+      if (el) el.textContent = formatTime(new Date());
+    }
+
+    async function computeEthereumPersonality(wallet) {
+      if (!ETHERSCAN_API_KEY) {
+        return "Clé API Etherscan manquante → impossible de déterminer la personnalité on-chain.";
+      }
+
+      const url = "https://api.etherscan.io/api"
+        + "?module=account&action=txlist"
+        + "&address=" + wallet.address
+        + "&sort=desc&page=1&offset=50"
+        + "&apikey=" + ETHERSCAN_API_KEY;
+
+      const res = await fetch(url);
+      if (!res.ok) return "Erreur lors de l’appel à Etherscan.";
+      const data = await res.json();
+      if (data.status !== "1" || !Array.isArray(data.result) || data.result.length === 0) {
+        return "Pas assez de transactions pour analyser la personnalité (adresse trop récente ou inactive).";
+      }
+
+      const txs = data.result;
+      const nowSec = Math.floor(Date.now() / 1000);
+      const txCount = txs.length;
+      const addrLower = wallet.address.toLowerCase();
+
+      let outgoing = 0, incoming = 0, contractCalls = 0;
+      let sumValueEth = 0;
+      let minTime = Number.MAX_SAFE_INTEGER;
+      let maxTime = 0;
+
+      for (const tx of txs) {
+        const from = (tx.from || "").toLowerCase();
+        const ts = parseInt(tx.timeStamp || "0", 10);
+        const valueWei = Number(tx.value || "0");
+        const valueEth = valueWei / 1e18;
+
+        if (from === addrLower) outgoing++; else incoming++;
+        if (tx.input && tx.input !== "0x") contractCalls++;
+        sumValueEth += valueEth;
+        if (ts > 0) {
+          if (ts < minTime) minTime = ts;
+          if (ts > maxTime) maxTime = ts;
+        }
+      }
+
+      const avgValueEth = sumValueEth / txCount;
+      const oldestDays = (nowSec - minTime) / 86400;
+      const newestDays = (nowSec - maxTime) / 86400;
+      const contractRatio = contractCalls / txCount;
+
+      if (txCount < 3 && oldestDays > 180) {
+        return "Holder discret / long terme (très peu de mouvements on-chain, historique ancien).";
+      }
+      if (contractRatio > 0.6 && txCount >= 15) {
+        if (newestDays < 7) return "Trader / utilisateur DeFi très actif récemment (beaucoup de swaps et d’interactions avec des contrats).";
+        return "Trader / utilisateur DeFi actif (nombreux contrats appelés, profil orienté trading et yield).";
+      }
+      if (incoming > outgoing * 2 && txCount >= 10) {
+        return "Whale accumulatrice (plus d’entrées que de sorties, profil accumulation / réserve).";
+      }
+      if (outgoing > incoming * 2 && txCount >= 10) {
+        return "Adresse en distribution / prise de profits (plus de sorties que d’entrées).";
+      }
+      if (txCount > 25 && oldestDays < 30) {
+        return "Adresse hyper active sur le dernier mois (profil opportuniste / swing trader).";
+      }
+      if (avgValueEth > 100 && txCount >= 5) {
+        return "Gros portefeuille / high-net-worth (transactions moyennes élevées, profil baleine prudente).";
+      }
+      return "Profil mixte (un peu de trading, un peu de holding, comportement relativement diversifié).";
+    }
+
+    async function analyzeWalletWithBot(w) {
+      const panel = document.getElementById("bot-analysis");
+      const nameEl = document.getElementById("bot-wallet-name");
+      const bodyEl = document.getElementById("bot-analysis-body");
+      if (!panel || !nameEl || !bodyEl) return;
+
+      nameEl.textContent = w.name + " – " + networkLabel(w.network);
+
+      let style = "", horizon = "", assets = "", notes = "";
+      let tags = [];
+
+      if (w.type && w.type.toLowerCase().includes("exchange")) {
+        style = "Portefeuille d’exchange centralisée / custodial.";
+        horizon = "Court terme / logistique (dépôts/retraits clients).";
+        notes = "Ne reflète pas un investisseur individuel mais la gestion de liquidité de la plateforme.";
+        tags.push("Exchange","Custodial");
+      } else if (w.type && w.type.toLowerCase().includes("staking")) {
+        style = "Contrat de staking / protocole.";
+        horizon = "Long terme (sécurisation du réseau).";
+        notes = "Adresse utilisée pour sécuriser le réseau et percevoir des rewards.";
+        tags.push("Staking","Long terme");
+      } else if (w.type && (w.type.toLowerCase().includes("exploit") || w.type.toLowerCase().includes("hack"))) {
+        style = "Adresse liée à un hack / exploit.";
+        horizon = "Fonds très surveillés, souvent immobiles.";
+        notes = "Risque de blacklist / sanctions.";
+        tags.push("Hack","Risque élevé");
+      } else if (w.type && w.type.toLowerCase().includes("token rh")) {
+        style = "Adresse liée à l’écosystème Richard Heart.";
+        horizon = "Long terme / spéculatif sur HEX / PulseChain.";
+        notes = "Permet de suivre l’activité de l’écosystème RH.";
+        tags.push("RH","PulseChain");
+      } else if (w.type && w.type.toLowerCase().includes("core")) {
+        style = "Adresse cœur de protocole / système.";
+        horizon = "Très long terme, structurel.";
+        notes = "Adresse critique pour le fonctionnement du réseau.";
+        tags.push("Core","System");
+      } else if (w.type && w.type.toLowerCase().includes("dex")) {
+        style = "Contrat DEX (échange décentralisé).";
+        horizon = "Flux continu de swaps, LP, farming.";
+        notes = "Adresse utilisée pour exécuter les échanges sur le DEX.";
+        tags.push("DEX","DeFi");
+      } else {
+        style = "Baleine / grosse adresse identifiée.";
+        horizon = "Profil exact inconnu.";
+        notes = "Surveiller surtout les gros transferts et les entrées/sorties de CEX.";
+        tags.push("Whale");
+      }
+
+      switch (w.network) {
+        case "bitcoin":   assets = "BTC uniquement."; break;
+        case "ethereum":  assets = "ETH + tokens ERC-20 (DeFi, memecoins, stablecoins…)."; break;
+        case "bsc":       assets = "BNB + tokens BEP-20."; break;
+        case "pulsechain":assets = "PLS, PLSX, INC, HEX et autres tokens PulseChain."; break;
+        default:          assets = "Actifs principaux du réseau.";
+      }
+
+      if (w.name.includes("Beacon Deposit Contract")) {
+        horizon = "Très long terme (validators ETH).";
+        tags.push("ETH2","Validator");
+      }
+
+      const tagsHtml = tags.length
+        ? "<p>" + tags.map(t => `<span class="bot-tag">${t}</span>`).join(" ") + "</p>"
+        : "";
+
+      bodyEl.innerHTML =
+        `${tagsHtml}
+        <p><span class="label">Style probable :</span> ${style}</p>
+        <p><span class="label">Horizon :</span> ${horizon}</p>
+        <p><span class="label">Actifs principaux :</span> ${assets}</p>
+        <p><span class="label">Personnalité probable :</span> <span id="bot-personality-line">Analyse en cours…</span></p>
+        <p><span class="label">Notes d’analyse :</span> ${notes}</p>
+        <p style="margin-top:6px; font-size:0.72rem; color:rgba(148,163,184,0.9);">
+          ⚠️ Analyse expérimentale basée sur quelques heuristiques on-chain.
+        </p>`;
+
+      panel.style.display = "block";
+      panel.scrollIntoView({ behavior: "smooth", block: "center" });
+
+      const personalityEl = document.getElementById("bot-personality-line");
+      if (!personalityEl) return;
+
+      if (w.network !== "ethereum") {
+        personalityEl.textContent = "Analyse détaillée dispo uniquement pour Ethereum pour l’instant.";
+        return;
+      }
+
+      try {
+        personalityEl.textContent = "Connexion à Etherscan…";
+        const personality = await computeEthereumPersonality(w);
+        personalityEl.textContent = personality;
+      } catch {
+        personalityEl.textContent = "Erreur pendant l’analyse on-chain.";
+      }
+    }
+
+    const tbody = document.getElementById("whales-body");
+    const emptyState = document.getElementById("empty-state");
+    const filterButtons = document.querySelectorAll(".filter-btn");
+    const statsGlobalEl = document.getElementById("stats-global");
+
+    let currentFilter = "all";
+
+    function updateGlobalStats() {
+      const counts = whales.reduce((acc, w) => {
+        acc[w.network] = (acc[w.network] || 0) + 1;
+        acc.all = (acc.all || 0) + 1;
+        return acc;
+      }, {});
+      statsGlobalEl.textContent =
+        `Total : ${counts.all} baleines • BTC : ${counts.bitcoin || 0} • ETH : ${counts.ethereum || 0} • BSC : ${counts.bsc || 0} • PLS : ${counts.pulsechain || 0}`;
+    }
+
+    function renderTable(activeNetwork = "all") {
+      tbody.innerHTML = "";
+      const filtered = whales.filter(w => activeNetwork === "all" ? true : w.network === activeNetwork);
+      emptyState.style.display = filtered.length === 0 ? "block" : "none";
+
+      for (const w of filtered) {
+        const tr = document.createElement("tr");
+
+        const tdName = document.createElement("td");
+        tdName.textContent = w.name;
+        tr.appendChild(tdName);
+
+        const tdNet = document.createElement("td");
+        tdNet.innerHTML =
+          `<span class="network-pill">
+            <span class="${networkDotClass(w.network)}"></span>
+            <span>${networkLabel(w.network)}</span>
+          </span>`;
+        tr.appendChild(tdNet);
+
+        const tdAddr = document.createElement("td");
+        tdAddr.innerHTML = `<span class="address">${w.address}</span>`;
+        tr.appendChild(tdAddr);
+
+        const tdType = document.createElement("td");
+        tdType.innerHTML = `<span class="type-pill">${w.type || "N/A"}</span>`;
+        tr.appendChild(tdType);
+
+        const tdActions = document.createElement("td");
+        const actionsDiv = document.createElement("div");
+        actionsDiv.className = "actions";
+
+        const btnExplorer = document.createElement("button");
+        btnExplorer.className = "btn-sm primary";
+        btnExplorer.textContent = "Explorer";
+        btnExplorer.addEventListener("click", () => {
+          const url = getExplorerUrl(w.network, w.address);
+          if (url !== "#") window.open(url, "_blank");
+        });
+
+        const btnCopy = document.createElement("button");
+        btnCopy.className = "btn-sm";
+        btnCopy.textContent = "Copier";
+        btnCopy.addEventListener("click", () => {
+          copyToClipboard(w.address);
+          btnCopy.textContent = "Copié ✓";
+          setTimeout(() => (btnCopy.textContent = "Copier"), 800);
+        });
+
+        const btnAnalyze = document.createElement("button");
+        btnAnalyze.className = "btn-sm";
+        btnAnalyze.textContent = "Analyser";
+        btnAnalyze.addEventListener("click", () => analyzeWalletWithBot(w));
+
+        actionsDiv.appendChild(btnExplorer);
+        actionsDiv.appendChild(btnCopy);
+        actionsDiv.appendChild(btnAnalyze);
+        tdActions.appendChild(actionsDiv);
+        tr.appendChild(tdActions);
+
+        tbody.appendChild(tr);
+      }
+
+      updateLastRefresh();
+    }
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const net = btn.getAttribute("data-network");
+        currentFilter = net;
+        filterButtons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        renderTable(currentFilter);
+      });
+    });
+
+    document.querySelectorAll(".donation-card [data-copy]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const selector = btn.getAttribute("data-copy");
+        const target = document.querySelector(selector);
+        if (!target) return;
+        copyToClipboard(target.textContent.trim());
+        const old = btn.textContent;
+        btn.textContent = "Copié ✓";
+        setTimeout(() => (btn.textContent = old), 900);
+      });
+    });
+
+    document.getElementById("copy-all")?.addEventListener("click", () => {
+      const eth = document.getElementById("addr-eth")?.textContent.trim() || "";
+      const bnb = document.getElementById("addr-bnb")?.textContent.trim() || "";
+      const pls = document.getElementById("addr-pls")?.textContent.trim() || "";
+      const full = `ETH : ${eth}\nBNB : ${bnb}\nPLS : ${pls}`;
+      copyToClipboard(full);
+      const btn = document.getElementById("copy-all");
+      const old = btn.textContent;
+      btn.textContent = "Tout copié ✓";
+      setTimeout(() => (btn.textContent = old), 1000);
+    });
+
+    updateGlobalStats();
+    renderTable(currentFilter);
+
+    setInterval(() => {
+      updateLastRefresh();
+    }, 30000);
+  </script>
+</body>
+</html>
